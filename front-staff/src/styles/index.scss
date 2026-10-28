@@ -1,0 +1,412 @@
+// ============================================================
+// 员工端全局样式（设计令牌来自 @shared/styles/tokens.scss）
+// ============================================================
+@use '@shared/styles/tokens.scss' as *;
+@use '@shared/styles/theme.scss';
+@use '@shared/styles/decoration.scss';
+@use '@shared/styles/vant-overrides.scss';
+@use '@shared/styles/workbench.scss';
+
+:root {
+  // Vant 主题变量对齐品牌色
+  --van-primary-color: var(--df-color-primary);
+  --van-success-color: var(--df-color-success);
+  --van-danger-color: var(--df-color-danger);
+  --van-text-color: var(--df-text-primary);
+  --van-text-color-2: var(--df-text-regular);
+  --van-text-color-3: var(--df-text-secondary);
+  --van-border-color: var(--df-border-color);
+  --van-background: var(--df-bg-page);
+  --van-background-2: var(--df-bg-card);
+  --van-active-color: var(--df-color-primary-light);
+  --van-tabbar-item-active-color: var(--df-color-primary);
+  --van-nav-bar-icon-color: var(--df-text-primary);
+  --van-button-primary-background: var(--df-color-primary);
+  --van-button-primary-border-color: var(--df-color-primary);
+  --van-picker-confirm-action-color: var(--df-color-primary);
+  --van-switch-on-background: var(--df-color-primary);
+  --van-checkbox-checked-icon-color: var(--df-color-primary);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--df-bg-page);
+  color: var(--df-text-primary);
+  font-size: $df-font-size-base;
+  -webkit-font-smoothing: antialiased;
+}
+
+// 移动端容器约束（匹配 mobile 模板：max-width 480px 居中）
+@media (max-width: 768px) {
+  body {
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+.app {
+  min-height: 100vh;
+}
+
+// 通用页面容器
+.page {
+  padding: $df-space-md $df-space-md $df-space-xxl;
+}
+
+// ============================================================
+// PC 端通用样式（/pc/* 页面，顶部导航由 pc/layout.vue 提供）
+// ============================================================
+.pc-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $df-space-xl $df-space-xl $df-space-xxl;
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: $df-space-md;
+    margin-bottom: $df-space-xl;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: $df-font-size-title;
+    font-weight: 800;
+    color: var(--df-color-title);
+    font-family: $df-font-serif;
+    letter-spacing: -0.02em;
+  }
+
+  &__sub {
+    margin: 0;
+    color: var(--df-text-secondary);
+    font-size: $df-font-size-sm;
+  }
+}
+
+.pc-card {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  border-radius: $df-radius-lg;
+  box-shadow: var(--df-shadow-card);
+  padding: $df-space-xl;
+  margin-bottom: $df-space-lg;
+}
+
+
+// 卡片（纸卡：细边框 + 小圆角 + 极浅阴影，报刊版式不悬浮）
+.card {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  border-radius: $df-radius-lg;
+  box-shadow: var(--df-shadow-card);
+  padding: $df-space-lg;
+  margin-bottom: $df-space-md;
+}
+
+.card__title {
+  font-size: $df-font-size-md;
+  font-weight: 800;
+  color: var(--df-color-title);
+  font-family: $df-font-serif;
+  letter-spacing: -0.01em;
+  margin-bottom: $df-space-md;
+}
+
+// Vant 分组标题：报刊式小刊头
+.van-cell-group__title {
+  font-family: $df-font-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--df-color-title);
+}
+
+// 订单状态条（共享组件 OrderStatusBar 基础样式）
+.df-order-status {
+  display: flex;
+  align-items: center;
+  gap: $df-space-sm;
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: $df-text-secondary;
+
+    &.is-done { color: $df-color-primary; }
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &__line {
+    width: 22px;
+    height: 1px;
+    background: $df-border-color;
+  }
+
+  &__terminal {
+    padding: 2px 10px;
+    border-radius: $df-radius-round;
+
+    &.is-canceled { background: $df-bg-page; color: $df-text-secondary; }
+    &.is-abnormal { background: #fdecec; color: $df-color-danger; }
+  }
+}
+
+// ============================================================
+// 移动端底部 Tab 导航（匹配 mobile 模板 .nav 风格）
+// ============================================================
+@media (max-width: 768px) {
+  .van-tabbar {
+    background: rgba(252, 251, 248, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--df-border-color);
+    box-shadow: 0 -4px 20px rgba(58, 51, 40, 0.06);
+  }
+
+  :root[data-theme='dark'] .van-tabbar {
+    background: rgba(32, 41, 31, 0.92);
+  }
+
+  .van-tabbar--fixed {
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+  }
+
+  .van-tabbar-item {
+    color: var(--df-text-secondary);
+    font-size: 10px;
+    font-weight: 500;
+
+    &__icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    &--active {
+      color: var(--df-color-primary);
+      font-weight: 700;
+    }
+  }
+}
+
+// ============================================================
+// 抽屉式侧滑菜单（匹配 mobile 模板 .drawer 风格）
+// ============================================================
+.df-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 296px;
+  max-width: 82vw;
+  z-index: 50;
+  transform: translateX(-104%);
+  transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.25, 1);
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--df-bg-dark-top), var(--df-bg-dark));
+  color: var(--df-drawer-text);
+
+  &.is-show {
+    transform: translateX(0);
+  }
+
+  &__head {
+    padding: 26px 22px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+
+  &__brand {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--df-radius-md);
+    overflow: hidden;
+    flex: 0 0 auto;
+    background: var(--df-drawer-hover);
+    box-shadow: 0 0 0 1px var(--df-drawer-active);
+    display: grid;
+    place-items: center;
+    color: var(--df-drawer-text);
+    font-family: var(--df-font-serif);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__title {
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 800;
+      font-family: var(--df-font-serif);
+      color: var(--df-drawer-text);
+    }
+
+    p {
+      margin: 3px 0 0;
+      font-size: 11px;
+      opacity: 0.55;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--df-radius-md);
+    border: none;
+    cursor: pointer;
+    background: var(--df-drawer-hover);
+    color: var(--df-drawer-text);
+    display: grid;
+    place-items: center;
+  }
+
+  &__sep {
+    height: 1px;
+    background: var(--df-drawer-active);
+    margin: 6px 22px 8px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 12px 22px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--df-drawer-text) 82%, transparent);
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--df-drawer-hover);
+    }
+
+    &.is-active {
+      background: var(--df-drawer-active);
+      color: var(--df-drawer-text);
+      font-weight: 700;
+    }
+  }
+
+  &__foot {
+    font-size: 11px;
+    opacity: 0.45;
+    padding: 20px 22px 28px;
+    color: var(--df-drawer-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid var(--df-drawer-active);
+    margin-top: 6px;
+
+    .ver {
+      font-family: var(--df-font-serif);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+  }
+}
+
+// 遮罩层
+.df-scrim {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--df-text-primary) 42%, transparent);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+
+  &.is-show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+// 移动端顶部 topbar 风格（菜单按钮 + 标题 + date-chip）
+.df-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 2px 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--df-bg-page) 94%, transparent),
+    color-mix(in srgb, var(--df-bg-page) 50%, transparent)
+  );
+
+  &__menu {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: var(--df-radius-md);
+    background: var(--df-bg-card);
+    box-shadow: var(--df-shadow-card);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    color: var(--df-text-primary);
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    flex: 1;
+    line-height: 1.2;
+    font-family: var(--df-font-serif);
+    color: var(--df-text-primary);
+
+    small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--df-text-secondary);
+      letter-spacing: 0.02em;
+      margin-top: 2px;
+      font-family: var(--df-font);
+    }
+  }
+
+  &__date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--df-text-secondary);
+    background: var(--df-bg-card);
+    border: 1.5px dashed var(--df-color-primary);
+    border-radius: 4px;
+    padding: 6px 12px;
+    box-shadow: var(--df-shadow-card);
+  }
+}

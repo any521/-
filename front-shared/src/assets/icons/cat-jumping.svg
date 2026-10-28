@@ -1,0 +1,31 @@
+<!-- 跳跃小猫（动态姿势）-->
+<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 身体 -->
+  <ellipse cx="60" cy="75" rx="28" ry="22" fill="#f29d28"/>
+  <!-- 头部 -->
+  <circle cx="60" cy="45" r="20" fill="#f29d28"/>
+  <!-- 左耳 -->
+  <path d="M45 32L50 20L58 32H45Z" fill="#d98820"/>
+  <!-- 右耳 -->
+  <path d="M75 32L70 20L62 32H75Z" fill="#d98820"/>
+  <!-- 眼睛 -->
+  <circle cx="53" cy="42" r="4" fill="#1c1814"/>
+  <circle cx="67" cy="42" r="4" fill="#1c1814"/>
+  <!-- 鼻子 -->
+  <ellipse cx="60" cy="50" rx="3" ry="2.5" fill="#c94f3d"/>
+  <!-- 嘴巴 -->
+  <path d="M60 52V56M55 55C55 55 58 58 60 58C62 58 65 55 65 55" stroke="#1c1814" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- 前爪（向上伸展） -->
+  <ellipse cx="42" cy="58" rx="6" ry="10" fill="#f29d28"/>
+  <ellipse cx="78" cy="58" rx="6" ry="10" fill="#f29d28"/>
+  <!-- 后腿（蹬地跳跃） -->
+  <ellipse cx="45" cy="92" rx="7" ry="12" fill="#d98820"/>
+  <ellipse cx="75" cy="92" rx="7" ry="12" fill="#d98820"/>
+  <!-- 尾巴（卷曲） -->
+  <path d="M35 80Q25 75 25 65Q25 55 35 55" stroke="#f29d28" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <!-- 脚印点缀 -->
+  <g opacity="0.3">
+    <circle cx="85" cy="105" r="5" fill="#1c1814"/>
+    <circle cx="35" cy="105" r="5" fill="#1c1814"/>
+  </g>
+</svg>

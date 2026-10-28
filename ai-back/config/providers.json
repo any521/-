@@ -1,0 +1,38 @@
+{
+  "$comment": "多供应商声明（05 章）：密钥经环境变量注入，支持热更新（core/config.py 监测 mtime 重载）",
+  "providers": [
+    {
+      "name": "deepseek",
+      "vendor": "deepseek",
+      "base_url": "https://api.deepseek.com/v1",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "models": ["deepseek-chat", "deepseek-reasoner"],
+      "capabilities": ["chat", "reasoning"],
+      "timeout_seconds": 15,
+      "max_tokens": 8192,
+      "enabled": true
+    },
+    {
+      "name": "ark",
+      "vendor": "volcengine",
+      "protocol": "openai",
+      "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+      "api_key_env": "ARK_API_KEY",
+      "models": ["doubao-seed-2-0-mini-260428"],
+      "capabilities": ["vision", "chat"],
+      "timeout_seconds": 15,
+      "max_tokens": 8192,
+      "enabled": true
+    },
+    {
+      "name": "mock",
+      "vendor": "internal",
+      "base_url": "internal://mock",
+      "api_key_env": "",
+      "models": ["mock-vision", "mock-chat"],
+      "capabilities": ["vision", "chat", "reasoning"],
+      "timeout_seconds": 1,
+      "enabled": true
+    }
+  ]
+}

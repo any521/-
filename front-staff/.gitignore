@@ -1,0 +1,25 @@
+node_modules
+dist
+*.tsbuildinfo
+
+# 环境变量文件（含密钥，不入库）
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# 日志与临时文件
+*.log
+tmp_*
+scratch_*
+fix_*.cjs
+
+# 构建缓存
+npm-cache/
+.npm-cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp

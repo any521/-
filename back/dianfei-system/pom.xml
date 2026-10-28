@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.dianfei</groupId>
+        <artifactId>dianfei-backend</artifactId>
+        <version>2.0.0</version>
+    </parent>
+
+    <artifactId>dianfei-system</artifactId>
+    <name>dianfei-system</name>
+    <description>系统层：用户/角色/菜单/认证/字典/配置/公告/日志/OAuth2 客户端</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.dianfei</groupId>
+            <artifactId>dianfei-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- MinIO 对象存储（dianfei.file.storage-type=minio 时启用，本地 m2 已缓存 8.5.12） -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.12</version>
+        </dependency>
+        <!-- 阿里云 OSS 对象存储（dianfei.file.storage-type=oss 时启用） -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.17.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 验收单测基于 H2（MySQL 兼容模式），无需本地 MySQL/Redis -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

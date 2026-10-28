@@ -1,0 +1,400 @@
+// ============================================================
+// Element Plus 组件样式覆盖 · 森林日报（对齐 workbench-desktop 模板）
+// 按钮 / 输入框 / 卡片 / 表格 / 标签 / Tab / 弹窗等统一报刊风格
+// ============================================================
+@use './tokens.scss' as *;
+
+// ------------------------------------------------------------
+// 按钮（对齐模板 .btn）
+// ------------------------------------------------------------
+.el-button {
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: var(--df-shadow-card);
+  transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:not(.is-disabled):hover {
+    filter: brightness(1.12);
+  }
+
+  &--primary {
+    background: var(--df-color-primary);
+    border-color: var(--df-color-primary);
+    color: var(--df-on-accent);
+
+    &:hover,
+    &:focus {
+      background: var(--df-color-primary);
+      border-color: var(--df-color-primary);
+      color: var(--df-on-accent);
+    }
+  }
+
+  &--success {
+    background: var(--df-module-1);
+    border-color: var(--df-module-1);
+    color: #fff;
+  }
+
+  &--warning {
+    background: var(--df-module-3);
+    border-color: var(--df-module-3);
+    color: #fff;
+  }
+
+  &--danger {
+    background: var(--df-color-danger);
+    border-color: var(--df-color-danger);
+    color: #fff;
+  }
+
+  &--default {
+    background: var(--df-bg-card);
+    border-color: var(--df-border-input);
+    color: var(--df-text-secondary);
+    font-weight: 500;
+
+    &:hover,
+    &:focus {
+      color: var(--df-text-primary);
+      background: var(--df-bg-card);
+      border-color: var(--df-border-input);
+    }
+  }
+
+  &--info {
+    background: var(--df-bg-nested);
+    border-color: var(--df-border-input);
+    color: var(--df-text-secondary);
+  }
+
+  &.is-plain {
+    background: var(--df-bg-card);
+    border-color: var(--df-border-input);
+    color: var(--df-text-secondary);
+  }
+
+  &.is-disabled,
+  &.is-disabled:hover,
+  &.is-disabled:focus {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &.is-link {
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    color: var(--df-color-primary);
+
+    &:hover {
+      filter: brightness(1.12);
+    }
+  }
+}
+
+// ------------------------------------------------------------
+// 输入框 / Textarea（对齐模板 input, textarea）
+// ------------------------------------------------------------
+.el-input__wrapper,
+.el-textarea__inner {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-input);
+  box-shadow: none !important;
+  border-radius: 10px;
+  color: var(--df-text-primary);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus,
+  &:focus-within {
+    border-color: var(--df-color-primary);
+    box-shadow: 0 0 0 3px var(--df-color-primary-light) !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--df-text-placeholder);
+  }
+}
+
+.el-textarea__inner {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.el-input-number__decrease,
+.el-input-number__increase {
+  background: var(--df-bg-nested);
+  border-color: var(--df-border-input);
+  color: var(--df-text-secondary);
+}
+
+// ------------------------------------------------------------
+// 卡片 Card（对齐模板 .card）
+// ------------------------------------------------------------
+.el-card {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  border-radius: $df-radius-lg;
+  box-shadow: var(--df-shadow-card);
+  color: var(--df-text-primary);
+
+  &__header {
+    border-bottom: 1px solid var(--df-border-color);
+    color: var(--df-color-title);
+    font-family: var(--df-font-serif);
+    font-weight: 800;
+  }
+}
+
+// ------------------------------------------------------------
+// 表格 Table
+// ------------------------------------------------------------
+.el-table {
+  background: var(--df-bg-card);
+  color: var(--df-text-primary);
+  border-radius: $df-radius-lg;
+  border: 1px solid var(--df-border-color);
+  box-shadow: var(--df-shadow-card);
+
+  th.el-table__cell {
+    background: var(--df-bg-page);
+    color: var(--df-text-primary);
+    font-weight: 700;
+  }
+
+  td.el-table__cell {
+    background: var(--df-bg-card);
+  }
+
+  tr:hover > td.el-table__cell {
+    background: var(--df-bg-nested);
+  }
+
+  &__body-wrapper,
+  &__header-wrapper {
+    background: transparent;
+  }
+
+  &::before {
+    display: none;
+  }
+}
+
+.el-table--border .el-table__cell {
+  border-right-color: var(--df-border-color);
+}
+
+// ------------------------------------------------------------
+// 标签 Tag（对齐模板 .badge）
+// ------------------------------------------------------------
+.el-tag {
+  border-radius: $df-radius-round;
+  font-size: $df-font-size-xs;
+  font-weight: 700;
+  padding: 0 9px;
+  border: none;
+  letter-spacing: 0.02em;
+
+  &--primary {
+    background: var(--df-color-primary-light);
+    color: var(--df-color-primary);
+  }
+
+  &--success {
+    background: rgba(74, 139, 61, 0.12);
+    color: var(--df-module-1);
+  }
+
+  &--warning {
+    background: rgba(139, 154, 61, 0.14);
+    color: var(--df-module-3);
+  }
+
+  &--danger {
+    background: var(--df-color-danger-muted);
+    color: var(--df-color-danger);
+  }
+
+  &--info {
+    background: var(--df-bg-nested);
+    color: var(--df-text-secondary);
+  }
+}
+
+// ------------------------------------------------------------
+// Tabs
+// ------------------------------------------------------------
+.el-tabs__item {
+  color: var(--df-text-secondary);
+  font-weight: 500;
+
+  &.is-active {
+    color: var(--df-color-primary);
+    font-weight: 700;
+  }
+}
+
+.el-tabs__active-bar {
+  background: var(--df-color-primary);
+}
+
+.el-tabs__nav-wrap::after {
+  background-color: var(--df-border-color);
+}
+
+// ------------------------------------------------------------
+// 弹窗 Dialog / MessageBox / Drawer / Notification
+// ------------------------------------------------------------
+.el-dialog,
+.el-message-box,
+.el-drawer,
+.el-notification {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  box-shadow: var(--df-shadow-overlay);
+  color: var(--df-text-primary);
+}
+
+.el-dialog {
+  border-radius: $df-radius-lg;
+
+  &__header {
+    color: var(--df-color-title);
+    font-family: var(--df-font-serif);
+    font-weight: 800;
+    border-bottom: 1px solid var(--df-border-color);
+  }
+
+  &__body {
+    color: var(--df-text-primary);
+  }
+}
+
+.el-drawer {
+  &__header {
+    color: var(--df-color-title);
+    font-family: var(--df-font-serif);
+    font-weight: 800;
+    border-bottom: 1px solid var(--df-border-color);
+  }
+}
+
+// ------------------------------------------------------------
+// 表单 Form / Select / DatePicker / Cascader
+// ------------------------------------------------------------
+.el-form-item__label {
+  color: var(--df-text-primary);
+  font-weight: 600;
+}
+
+.el-select__wrapper,
+.el-select .el-input__wrapper,
+.el-date-editor.el-input__wrapper,
+.el-cascader .el-input__wrapper {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-input);
+  box-shadow: none !important;
+  border-radius: 10px;
+  color: var(--df-text-primary);
+}
+
+.el-select-dropdown__item {
+  color: var(--df-text-primary);
+
+  &.selected {
+    color: var(--df-color-primary);
+    font-weight: 700;
+  }
+
+  &:hover {
+    background: var(--df-bg-nested);
+  }
+}
+
+.el-select-dropdown,
+.el-picker-panel,
+.el-cascader__dropdown,
+.el-dropdown__popper {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  box-shadow: var(--df-shadow-overlay);
+  color: var(--df-text-primary);
+}
+
+// ------------------------------------------------------------
+// 分页 Pagination / Steps / Tree / Menu / Collapse
+// ------------------------------------------------------------
+.el-pagination {
+  color: var(--df-text-secondary);
+
+  .el-pager li {
+    background: var(--df-bg-card);
+    color: var(--df-text-primary);
+    border: 1px solid var(--df-border-color);
+    border-radius: $df-radius-sm;
+
+    &.is-active {
+      background: var(--df-color-primary);
+      color: var(--df-on-accent);
+      border-color: var(--df-color-primary);
+    }
+  }
+
+  button {
+    background: var(--df-bg-card);
+    color: var(--df-text-primary);
+    border: 1px solid var(--df-border-color);
+  }
+}
+
+.el-step__head.is-finish,
+.el-step__title.is-finish {
+  color: var(--df-color-primary);
+  border-color: var(--df-color-primary);
+}
+
+.el-tree {
+  background: transparent;
+  color: var(--df-text-primary);
+
+  &-node__content:hover {
+    background: var(--df-bg-nested);
+  }
+}
+
+.el-menu {
+  background: transparent;
+  border-right: none;
+}
+
+.el-collapse {
+  border-top: 1px solid var(--df-border-color);
+  border-bottom: 1px solid var(--df-border-color);
+
+  &-item__header {
+    background: var(--df-bg-card);
+    color: var(--df-text-primary);
+    border-bottom-color: var(--df-border-color);
+  }
+
+  &-item__wrap {
+    background: var(--df-bg-card);
+    border-bottom-color: var(--df-border-color);
+  }
+}
+
+// ------------------------------------------------------------
+// 通用 .app-card 精确对齐模板 .card
+// ------------------------------------------------------------
+.app-card {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  border-radius: $df-radius-lg;
+  box-shadow: var(--df-shadow-card);
+  padding: $df-space-lg;
+}

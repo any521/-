@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 测试与评估
+rag_eval/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 日志与临时文件
+*.log
+tmp_*
+tmp_*.json
+tmp_*.png
+tmp_*.log
+
+# 数据文件（生产环境通过 volume 挂载，不入镜像）
+# 注：data/ 目录的废物分类数据当前仍需打入镜像，故不排除
+
+# RAG 索引数据（通过 volume 挂载）
+rag_data/
+
+# 构建工具与脚本
+test_main.http
+Dockerfile
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# 文档
+*.md
+README.md
+
+# 环境变量
+.env
+.env.local
+.env.*.local

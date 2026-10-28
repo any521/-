@@ -1,0 +1,353 @@
+// ============================================================
+// Vant 组件样式覆盖 · 森林日报（对齐 workbench-mobile/desktop 模板）
+// 按钮 / 输入框 / 单元格 / 标签 / 导航 / Tab / Card 等统一报刊风格
+// ============================================================
+@use './tokens.scss' as *;
+
+// ------------------------------------------------------------
+// 按钮（对齐模板 .btn）
+// ------------------------------------------------------------
+.van-button {
+  border-radius: $df-radius-md; // 12px，移动端模板 var(--radius-tile)
+  font-weight: 700;
+  box-shadow: var(--df-shadow-card);
+  transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:not(:disabled):hover {
+    filter: brightness(1.12);
+  }
+
+  &--primary {
+    background: var(--df-color-primary);
+    border-color: var(--df-color-primary);
+    color: var(--df-on-accent);
+  }
+
+  &--success {
+    background: var(--df-module-1);
+    border-color: var(--df-module-1);
+    color: #fff;
+  }
+
+  &--warning {
+    background: var(--df-module-3);
+    border-color: var(--df-module-3);
+    color: #fff;
+  }
+
+  &--danger {
+    background: var(--df-color-danger);
+    border-color: var(--df-color-danger);
+    color: #fff;
+  }
+
+  &--default {
+    background: var(--df-bg-card);
+    color: var(--df-text-secondary);
+    border: 1px solid var(--df-border-input);
+  }
+
+  &--plain {
+    background: var(--df-bg-card);
+    color: var(--df-text-secondary);
+    border: 1px solid var(--df-border-input);
+  }
+
+  &:disabled,
+  &--disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &--small {
+    border-radius: $df-radius-sm;
+    font-size: $df-font-size-sm;
+  }
+
+  &--large,
+  &--block {
+    border-radius: $df-radius-md;
+  }
+
+  &--round {
+    border-radius: $df-radius-round;
+  }
+}
+
+// PC 端按钮对齐 desktop 模板：border-radius 10px，padding 10px 18px
+@media (min-width: 769px) {
+  .van-button {
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: $df-font-size-base;
+  }
+}
+
+// ------------------------------------------------------------
+// 输入框 / Field / Textarea（对齐模板 input, textarea）
+// ------------------------------------------------------------
+.van-field__control,
+.van-field__textarea,
+.van-field__body input {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-input);
+  border-radius: $df-radius-sm;
+  padding: 9px 12px;
+  color: var(--df-text-primary);
+  font-size: $df-font-size-base;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus {
+    border-color: var(--df-color-primary);
+    box-shadow: 0 0 0 3px var(--df-color-primary-light);
+  }
+
+  &::placeholder {
+    color: var(--df-text-placeholder);
+  }
+}
+
+.van-field__textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.van-cell {
+  background: var(--df-bg-card);
+  color: var(--df-text-primary);
+
+  &::after {
+    border-bottom-color: var(--df-border-color);
+  }
+
+  .van-cell__label {
+    color: var(--df-text-secondary);
+  }
+}
+
+.van-cell-group {
+  background: transparent;
+
+  &__title {
+    font-family: var(--df-font-serif);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--df-color-title);
+  }
+
+  &--inset {
+    border-radius: $df-radius-lg;
+    overflow: hidden;
+    box-shadow: var(--df-shadow-card);
+    border: 1px solid var(--df-border-color);
+    background: var(--df-bg-card);
+  }
+}
+
+// ------------------------------------------------------------
+// 标签 Tag（对齐模板 .badge）
+// ------------------------------------------------------------
+.van-tag {
+  border-radius: $df-radius-round;
+  font-size: $df-font-size-xs;
+  font-weight: 700;
+  padding: 2px 9px;
+  letter-spacing: 0.02em;
+
+  &--primary {
+    background: var(--df-color-primary-light);
+    color: var(--df-color-primary);
+  }
+
+  &--success {
+    background: rgba(74, 139, 61, 0.12);
+    color: var(--df-module-1);
+  }
+
+  &--warning {
+    background: rgba(139, 154, 61, 0.14);
+    color: var(--df-module-3);
+  }
+
+  &--danger {
+    background: var(--df-color-danger-muted);
+    color: var(--df-color-danger);
+  }
+
+  &--default {
+    background: var(--df-bg-nested);
+    color: var(--df-text-secondary);
+  }
+}
+
+// ------------------------------------------------------------
+// 导航栏 NavBar（移动端顶部，对齐 .topbar）
+// ------------------------------------------------------------
+.van-nav-bar {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--df-bg-page) 94%, transparent),
+    color-mix(in srgb, var(--df-bg-page) 50%, transparent)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  &__title {
+    color: var(--df-text-primary);
+    font-family: var(--df-font-serif);
+    font-weight: 700;
+  }
+
+  .van-icon {
+    color: var(--df-text-primary);
+  }
+}
+
+// ------------------------------------------------------------
+// Tabs（对齐模板 tab 风格）
+// ------------------------------------------------------------
+.van-tabs__nav {
+  background: transparent;
+}
+
+.van-tab {
+  color: var(--df-text-secondary);
+  font-weight: 500;
+
+  &--active {
+    color: var(--df-color-primary);
+    font-weight: 700;
+  }
+}
+
+.van-tabs__line {
+  background: var(--df-color-primary);
+}
+
+// ------------------------------------------------------------
+// NoticeBar / Badge / Switch / Checkbox / Radio
+// ------------------------------------------------------------
+.van-notice-bar {
+  background: var(--df-bg-nested);
+  color: var(--df-text-secondary);
+}
+
+.van-switch--on {
+  background: var(--df-color-primary);
+}
+
+.van-checkbox__icon--checked .van-icon {
+  background: var(--df-color-primary);
+  border-color: var(--df-color-primary);
+}
+
+.van-radio__icon--checked .van-icon {
+  background: var(--df-color-primary);
+  border-color: var(--df-color-primary);
+}
+
+.van-badge--fixed {
+  background: var(--df-color-danger);
+}
+
+// ------------------------------------------------------------
+// ActionSheet / Dialog / Toast / Popup 等浮层
+// ------------------------------------------------------------
+.van-action-sheet,
+.van-dialog,
+.van-popup,
+.van-toast {
+  background: var(--df-bg-card);
+  color: var(--df-text-primary);
+  border: 1px solid var(--df-border-color);
+  box-shadow: var(--df-shadow-overlay);
+}
+
+.van-toast {
+  // 背景被覆盖为主题卡片色后，文字必须同步改用主题文字色，
+  // 否则 Vant 默认白字在浅色卡片背景上完全重合看不清（线上缺陷 2026-08）
+  --van-toast-text-color: var(--df-text-primary);
+}
+
+.van-action-sheet {
+  border-radius: $df-radius-xl $df-radius-xl 0 0;
+}
+
+.van-dialog {
+  border-radius: $df-radius-lg;
+}
+
+.van-toast {
+  border-radius: $df-radius-md;
+  border: none;
+}
+
+.van-picker {
+  background: var(--df-bg-card);
+
+  &-column__item {
+    color: var(--df-text-primary);
+  }
+
+  &-column__item--selected {
+    color: var(--df-color-primary);
+    font-weight: 700;
+  }
+}
+
+// ------------------------------------------------------------
+// 下拉刷新 / 加载 / 空状态
+// ------------------------------------------------------------
+.van-pull-refresh__track {
+  background: transparent;
+}
+
+.van-empty__description {
+  color: var(--df-text-secondary);
+}
+
+.van-loading__text {
+  color: var(--df-text-secondary);
+}
+
+// ------------------------------------------------------------
+// Step / Steps / Progress / Slider / Rate / Uploader
+// ------------------------------------------------------------
+.van-step--active .van-step__circle,
+.van-step--active .van-step__title {
+  color: var(--df-color-primary);
+}
+
+.van-progress__portion {
+  background: var(--df-color-primary);
+}
+
+.van-slider__bar {
+  background: var(--df-color-primary);
+}
+
+.van-rate__icon--full {
+  color: var(--df-module-3);
+}
+
+.van-uploader__upload {
+  background: var(--df-bg-nested);
+  border: 1px dashed var(--df-border-input);
+  color: var(--df-text-secondary);
+}
+
+// ------------------------------------------------------------
+// 通用 .card 类精确对齐模板 .card
+// ------------------------------------------------------------
+.card {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  border-radius: $df-radius-lg;
+  box-shadow: var(--df-shadow-card);
+  padding: $df-space-lg;
+  margin-bottom: $df-space-md;
+}

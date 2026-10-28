@@ -1,0 +1,3 @@
+# RAG 索引产物（生成物，不入库；documents.json 供 RAG-04 复用，按需放开）
+rag_data/
+__pycache__/

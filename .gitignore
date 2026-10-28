@@ -1,0 +1,47 @@
+# ---- 依赖与构建产物 ----
+node_modules/
+dist/
+target/
+*.tsbuildinfo
+.npm-cache/
+npm-cache/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# ---- 运行时数据 ----
+**/upload/
+back/logs/
+back/tmp-check/
+*.log
+hs_err_pid*.log
+replay_pid*.log
+*.hprof
+
+# ---- 本地环境与密钥 ----
+.env
+.env.local
+.env.*.local
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+
+# 说明：各前端 .env.development / .env.production 仅包含非敏感的构建配置；
+# 高德 Key、模型服务 Key、SMTP 授权码、JWT/数据库口令等一律通过环境变量注入。
+
+# ---- 大体积数据与运行时资产（获取方式见 README） ----
+ai-back/data/
+ai-back/rag_data/
+ai-back/models/
+front-user/public/models/*.onnx
+front-user/src/assets/ort/*.wasm
+
+# ---- IDE / OS ----
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

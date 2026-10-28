@@ -1,0 +1,117 @@
+// ============================================================
+// 设计令牌 · 森林日报（环保绿 + 墨绿主题，三端共享）
+// 米白旧报纸底 / 棕褐字色 / 墨绿主色 / 五色环保绿系
+// 衬线报头 + 无衬线正文 + 手写体批注
+// ============================================================
+
+// ---- 主色（墨绿系）----
+$df-color-primary: #2d5a3d;          // 主色·墨绿：按钮、选中态、section 竖条
+$df-color-primary-light: #e3ede3;    // 主色浅底：focus ring 光晕、step active 底
+$df-color-primary-dark: #24574c;     // 深墨绿（Hover/Pressed 态）
+
+// ---- 副色（环保绿系 5 色轮转，作为模块色）----
+$df-color-secondary: #4a8b3d;        // 环保绿 — 打卡/完成/收入
+$df-color-secondary-light: #eef3ec;
+$df-color-secondary-dark: #3a7330;
+
+$df-color-stamp: #b85c4a;            // 邮戳/陶土红 — 删除/危险操作
+$df-color-stamp-light: #f3e8e4;
+
+// ---- 标题色（环保绿系深色）----
+$df-color-title: #2d5a3d;            // 标题·墨绿（页面大标题/卡片标题专用）
+$df-color-title-dark: #7cc47a;       // 暗色模式下的标题绿（保持明亮）
+
+// ---- 模块色（环保绿系 5 色轮转）----
+$df-module-1: #4a8b3d;               // 环保绿 — 打卡/完成/收入
+$df-module-2: #2d5a3d;               // 墨绿 — 阅读/focus/趋势线
+$df-module-3: #8b9a3d;               // 橄榄黄绿 — 运动/连续天数/星标
+$df-module-4: #6b8e6b;               // 鼠尾草绿 — 记账/占比图
+$df-module-5: #4a6b5a;               // 深青绿 — 笔记/日记
+
+// ---- 语义色 ----
+$df-color-success: #4a8b3d;          // 成功 = 环保绿
+$df-color-warning: #8b9a3d;          // 警告 = 橄榄黄绿
+$df-color-danger: #b85c4a;           // 危险 = 陶土红
+$df-color-danger-muted: #f3e8e4;     // 危险浅底
+$df-color-info: #6b8e6b;             // 信息 = 鼠尾草绿
+$df-color-carbon: #4a6b5a;           // 碳积分·深青绿
+$df-color-carbon-dark: #3a5a4a;
+
+$df-color-gold: #bd8a4e;             // 积分·蜂蜜金（暖金属感）
+$df-color-gold-dark: #a17340;
+
+// ---- 中性色（棕褐色调，浅棕墨色文字）----
+$df-text-primary: #3a3328;           // 主文本·浅棕墨色
+$df-text-regular: #6b5f4a;           // 次文本·暖棕
+$df-text-secondary: #9a8d75;         // 弱文本·浅棕灰
+$df-text-placeholder: #b8ab92;       // 占位符·米棕灰
+
+// ---- 边框 ----
+$df-border-color: #ddd4bd;           // 常规边框·浅棕米色
+$df-border-input: #c9bea1;           // 强边框·输入框/按钮/chip/勾选框
+
+// ---- 表面 ----
+$df-bg-page: #f2efe3;                // 页面底色·旧报纸米白
+$df-bg-card: #fbf8ef;                // 卡片/面板/输入框·稍亮米白
+$df-bg-nested: #ece6d4;              // 嵌套区域·图标瓦底/ghost 按钮/hero 底
+$df-bg-dark: #1f3d2b;                // 抽屉/侧栏底色·深墨绿
+$df-bg-dark-top: #2a4a37;            // 抽屉/侧栏渐变上色
+
+// ---- 抽屉/侧栏文字色 ----
+$df-drawer-text: #f4f1e8;            // 侧栏前景文字·米白
+$df-drawer-text-mute: rgba(244, 241, 232, 0.55);
+$df-drawer-hover: rgba(244, 241, 232, 0.08);
+$df-drawer-active: rgba(122, 196, 122, 0.18);
+
+// ---- 字号 ----
+$df-font-size-xs: 11px;
+$df-font-size-sm: 13px;
+$df-font-size-base: 14px;
+$df-font-size-md: 16px;
+$df-font-size-lg: 18px;
+$df-font-size-xl: 22px;
+$df-font-size-title: 28px;
+$df-font-size-elder: 20px;           // 适老化大字体基准
+
+// ---- 字体栈 ----
+$df-font: -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+$df-font-serif: "Georgia", "Songti SC", "SimSun", "Noto Serif SC", serif;
+$df-font-hand: "Caveat", "Kaiti SC", "STKaiti", "Marker Felt", cursive;
+
+// ---- 间距 ----
+$df-space-xs: 4px;
+$df-space-sm: 8px;
+$df-space-md: 12px;
+$df-space-lg: 16px;
+$df-space-xl: 24px;
+$df-space-xxl: 32px;
+
+// ---- 圆角 ----
+$df-radius-xs: 4px;
+$df-radius-sm: 8px;                  // 控件圆角
+$df-radius-md: 12px;                 // 瓷砖圆角
+$df-radius-lg: 16px;                 // 卡片圆角
+$df-radius-xl: 22px;                 // 大面板/弹层圆角
+$df-radius-round: 999px;
+
+// ---- 阴影（暖棕晕染 + 墨绿投影）----
+$df-shadow-card: 0 1px 2px rgba(58, 51, 40, 0.05), 0 4px 16px rgba(58, 51, 40, 0.06);
+$df-shadow-overlay: 0 10px 28px rgba(45, 90, 61, 0.16);
+$df-shadow-float: 0 10px 28px rgba(45, 90, 61, 0.16);
+
+// ---- 渐变（墨绿系强调）----
+$df-gradient-brand: linear-gradient(180deg, #2a4a37, #1f3d2b);
+$df-gradient-secondary: linear-gradient(135deg, #4a8b3d, #3a7330);
+$df-gradient-stamp: linear-gradient(135deg, #b85c4a, #9a4a3a);
+$df-gradient-carbon: linear-gradient(135deg, #4a6b5a, #3a5a4a);
+$df-gradient-gold: linear-gradient(135deg, #bd8a4e, #a17340);
+$df-gradient-clock: linear-gradient(140deg, #33322e 0%, #232220 60%, #1c1b19 100%);
+
+// ---- 布局尺寸 ----
+$df-sidebar-w: 258px;
+$df-sidebar-w-collapsed: 64px;
+$df-nav-h: 62px;                     // 移动端底部导航栏高度
+$df-topbar-h: 56px;                  // PC 端顶栏高度
+
+// 本文件只声明 Sass 令牌，不产生 CSS。运行时主题变量由 theme.scss
+// 在每个应用的全局样式入口中加载一次，避免路由组件重复写回默认主题。

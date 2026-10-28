@@ -1,0 +1,174 @@
+# 点废成金 v2.0 · 一键本地/生产环境（对齐 13_deployment.md 服务拓扑）
+# 用法：cd deploy && docker compose up -d
+#   - 镜像优先用本地已有镜像（mysql:8.0 / redis:7-alpine 本地均已存在，避免拉取远程）
+#   - 本地开发约定：MySQL 直接用本机实例（3306），不启动 mysql 容器；
+#     仅拉起其余依赖：docker compose up -d redis（mysql 服务供生产/全容器环境使用）
+#   - 库表结构由 Flyway 管理：back 启动时自动执行 dianfei-admin/src/main/resources/db/migration 下 V1..Vn，
+#     新库/存量库均可直接更新；back/db/*.sql 仅作历史参考，不再挂载到 MySQL 容器
+#   - back / ai-service 镜像需先构建（或 docker compose up --build）
+#   - 生产环境请复制 .env.example 为 .env 并修改全部密码/密钥
+
+services:
+  # 生产共存模式（C-O1）：默认不启动本容器，由宿主机 agrimind 原生 nginx 子路径反代
+  # （nginx 子路径配置见 deploy/nginx/dianfei-subpath.conf 或服务器 /etc/nginx/conf.d/）
+  # 需要独立 nginx 时：docker compose --profile standalone up -d nginx
+  nginx:
+    profiles: ["standalone"]
+    image: nginx:1.27-alpine
+    container_name: dianfei-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      # 反代上游：默认容器网络 back；联调期后端跑宿主机时在 .env 设 BACKEND_UPSTREAM=http://host.docker.internal:8080
+      BACKEND_UPSTREAM: ${BACKEND_UPSTREAM:-http://back:8080}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # Linux 宿主机兼容（Win/Mac Docker Desktop 自带）
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates:ro          # envsubst 模板（官方镜像 entrypoint 自动渲染到 conf.d）
+      - ../front/dist:/usr/share/nginx/html/admin:ro       # 管理后台（front/dist，base=/admin/）
+      - ../front-user/dist:/usr/share/nginx/html/user:ro   # 用户端 H5（front-user/dist，base=/）
+      - ../front-staff/dist:/usr/share/nginx/html/staff:ro # 员工端（front-staff/dist，base=/staff/）
+    depends_on:
+      - back
+    networks: [dianfei]
+
+  back:
+    build:
+      context: ../back
+      dockerfile: Dockerfile
+    image: dianfei/back:2.0.0
+    container_name: dianfei-back
+    restart: unless-stopped
+    # C-O1 生产共存：仅绑定回环 8081 供宿主机原生 nginx 反代（不对外暴露；独占 nginx 模式可移除）
+    ports:
+      - "127.0.0.1:8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_DB: ${MYSQL_DB:?MYSQL_DB is required}
+      MYSQL_USER: ${MYSQL_USER:?MYSQL_USER is required}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      DIANFEI_FIELD_KEY: ${DIANFEI_FIELD_KEY:?DIANFEI_FIELD_KEY is required}
+      DIANFEI_CORS_ALLOWED_ORIGINS: ${DIANFEI_CORS_ALLOWED_ORIGINS:?DIANFEI_CORS_ALLOWED_ORIGINS is required}
+      # C14 修复：az 链路必需显式注入 AI 服务地址（Spring 属性 dianfei.ai.base-url），
+      # 旧变量 AI_SERVICE_URL 无绑定已废弃；容器网络内用服务名 ai-service:8100
+      DIANFEI_AI_BASE_URL: http://ai-service:8100
+      # 内网服务间 Token：与 ai-service 的 AI_INTERNAL_TOKEN 保持一致（空=开发模式，生产必配）
+      DIANFEI_AI_INTERNAL_TOKEN: ${AI_INTERNAL_TOKEN:?AI_INTERNAL_TOKEN is required}
+      # Python 回调 /api/ai/config/runtime 的 X-Internal-Token 校验值（空=开发模式，生产必配）
+      DIANFEI_AI_CONFIG_CALLBACK_TOKEN: ${AI_INTERNAL_TOKEN:?AI_INTERNAL_TOKEN is required}
+      # 供应商密钥列 AES 密钥（16/24/32 字节；空=生产见 application-prod.yml 拒绝启动）
+      DIANFEI_AI_CONFIG_AES_KEY: ${DIANFEI_AI_CONFIG_AES_KEY:?DIANFEI_AI_CONFIG_AES_KEY is required}
+      # 邮箱验证码（V39）：163 SMTP 授权码与发件人
+      MAIL_PASSWORD: ${MAIL_PASSWORD:?MAIL_PASSWORD is required}
+      MAIL_USERNAME: ${MAIL_USERNAME:-noreply@example.com}
+      # 文件存储：默认 local（容器卷 back-upload）；启用阿里云 OSS 时在 .env 设 DIANFEI_FILE_STORAGE_TYPE=oss 并配凭据
+      DIANFEI_FILE_STORAGE_TYPE: ${DIANFEI_FILE_STORAGE_TYPE:-local}
+      DIANFEI_OSS_ENDPOINT: ${DIANFEI_OSS_ENDPOINT:-oss-cn-beijing.aliyuncs.com}
+      DIANFEI_OSS_ACCESS_KEY_ID: ${DIANFEI_OSS_ACCESS_KEY_ID:-}
+      DIANFEI_OSS_ACCESS_KEY_SECRET: ${DIANFEI_OSS_ACCESS_KEY_SECRET:-}
+      DIANFEI_OSS_BUCKET: ${DIANFEI_OSS_BUCKET:-waste-turns-to-gold}
+      JAVA_OPTS: -Xms512m -Xmx2g -XX:MaxRAMPercentage=75 -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/app/logs/ -Xlog:gc*:file=/app/logs/gc.log:time,uptime:filecount=5,filesize=10M
+      # 线上禁用 knife4j：其自动配置与 springdoc 2.x 不兼容会启动失败（API 文档用原生 swagger-ui）
+      SPRING_AUTOCONFIGURE_EXCLUDE: com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration
+    volumes:
+      - back-upload:/app/upload
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      # S1：镜像内已内置 HEALTHCHECK，此处显式声明便于 compose ps 展示（与 Dockerfile 同源）
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/api/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+    networks: [dianfei]
+
+  # AI 旁路服务：不对外暴露端口，仅内网供 back 调用（故障隔离，宕机走降级）
+  ai-service:
+    build:
+      context: ../ai-back
+      dockerfile: Dockerfile
+    image: dianfei/ai-service:2.0.0
+    container_name: dianfei-ai-service
+    restart: unless-stopped
+    environment:
+      AI_INTERNAL_TOKEN: ${AI_INTERNAL_TOKEN:?AI_INTERNAL_TOKEN is required}
+      QDRANT_URL: http://qdrant:6333
+      # C14 修复：容器内 Java runtime API 地址（默认 127.0.0.1:8080 在容器内不可达，
+      # 未配置则永远回退本地 JSON，管理端动态配置失效）；与 nginx 上游一致用服务名 back
+      AI_CONFIG_API_URL: http://back:8080/api/ai/config/runtime
+    depends_on:
+      - qdrant
+    networks: [dianfei]
+
+  mysql:
+    image: mysql:8.0
+    container_name: dianfei-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      MYSQL_DATABASE: ${MYSQL_DB:?MYSQL_DB is required}
+      MYSQL_USER: ${MYSQL_USER:?MYSQL_USER is required}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # 建表/更新已改由 Flyway 在 back 启动时执行，不再挂载 back/db 初始化脚本
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [dianfei]
+
+  redis:
+    image: redis:7-alpine
+    container_name: dianfei-redis
+    restart: unless-stopped
+    # healthcheck 的 $${REDIS_PASSWORD} 取容器内环境变量，必须显式注入（否则空密码 AUTH 失败判 unhealthy）
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD is required}"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      # S1：redis-cli AUTH+PING 探活（--no-auth-warning 抑制命令行口令告警）
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [dianfei]
+
+  # RAG 维修知识库向量索引（Track E）
+  qdrant:
+    # S1：固定 release 版本保证可复现（本机已有其他 tag 时可设 QDRANT_TAG 覆盖）
+    image: qdrant/qdrant:${QDRANT_TAG:-v1.12.4}
+    container_name: dianfei-qdrant
+    restart: unless-stopped
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks: [dianfei]
+
+volumes:
+  mysql-data:
+  redis-data:
+  qdrant-data:
+  back-upload:
+
+networks:
+  dianfei:
+    driver: bridge

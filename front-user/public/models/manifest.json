@@ -1,0 +1,18 @@
+{
+  "$comment": "F6 端侧模型资产清单（版本管理唯一入口）：发版即更新 version+file，useEdgeDetect 按此加载；file 缺失时自动降级 Mock 演示",
+  "version": "0.3.1",
+  "file": "yolo-recycle-v0.3.1.onnx",
+  "inputSize": 640,
+  "scoreThreshold": 0.35,
+  "iouThreshold": 0.45,
+  "labels": [
+    "glass",
+    "metal",
+    "paper",
+    "plastic",
+    "kitchen",
+    "other"
+  ],
+  "liveFile": "yolo-recycle-v0.3.1-live416.onnx",
+  "liveInputSize": 416
+}

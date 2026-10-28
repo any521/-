@@ -1,0 +1,223 @@
+@use './tokens.scss' as *;
+
+// =====================================
+// 运行时主题令牌 · 森林日报（环保绿 + 墨绿主题）
+// 日版为默认（旧报纸米白），[data-theme="dark"] 为夜版（暗墨绿森林）
+// =====================================
+
+:root {
+  color-scheme: light;
+
+  // ---- 页面与表面（米白旧报纸） ----
+  --df-bg-page: #{$df-bg-page};
+  --df-bg-card: #{$df-bg-card};
+  --df-bg-nested: #{$df-bg-nested};
+
+  // ---- 边框 ----
+  --df-border-color: #{$df-border-color};
+  --df-border-input: #{$df-border-input};
+
+  // ---- 文本层级（浅棕色文字） ----
+  --df-text-primary: #{$df-text-primary};
+  --df-text-regular: #{$df-text-regular};
+  --df-text-secondary: #{$df-text-secondary};
+  --df-text-placeholder: #{$df-text-placeholder};
+
+  // ---- 主色（墨绿系） ----
+  --df-color-primary: #{$df-color-primary};
+  --df-color-primary-light: #{$df-color-primary-light};
+  --df-color-primary-dark: #{$df-color-primary-dark};
+  --df-on-accent: #f4f1e8;                  // 主色上的前景文字·米白
+
+  // ---- 副色（环保绿系） ----
+  --df-color-secondary: #{$df-color-secondary};
+  --df-color-secondary-light: #{$df-color-secondary-light};
+  --df-color-secondary-dark: #{$df-color-secondary-dark};
+
+  // ---- 模块色（环保绿系 5 色轮转） ----
+  --df-module-1: #{$df-module-1};
+  --df-module-2: #{$df-module-2};
+  --df-module-3: #{$df-module-3};
+  --df-module-4: #{$df-module-4};
+  --df-module-5: #{$df-module-5};
+
+  // ---- 危险色 ----
+  --df-color-danger: #{$df-color-danger};
+  --df-color-danger-muted: #{$df-color-danger-muted};
+  --df-color-stamp: #{$df-color-stamp};
+
+  // ---- 标题色 ----
+  --df-color-title: #{$df-color-title};
+
+  // ---- 语义色 ----
+  --df-color-success: #{$df-color-success};
+  --df-color-warning: #{$df-color-warning};
+  --df-color-info: #{$df-color-info};
+  --df-color-carbon: #{$df-color-carbon};
+  --df-color-gold: #{$df-color-gold};
+
+  // ---- 抽屉/侧栏（深墨绿面板） ----
+  --df-bg-dark: #{$df-bg-dark};
+  --df-bg-dark-top: #{$df-bg-dark-top};
+  --df-drawer-text: #{$df-drawer-text};
+  --df-drawer-text-mute: #{$df-drawer-text-mute};
+  --df-drawer-hover: #{$df-drawer-hover};
+  --df-drawer-active: #{$df-drawer-active};
+
+  // ---- 阴影 ----
+  --df-shadow-card: #{$df-shadow-card};
+  --df-shadow-overlay: #{$df-shadow-overlay};
+  --df-shadow-float: #{$df-shadow-float};
+
+  // ---- 字号 ----
+  --df-font-size-xs: #{$df-font-size-xs};
+  --df-font-size-sm: #{$df-font-size-sm};
+  --df-font-size-base: #{$df-font-size-base};
+  --df-font-size-md: #{$df-font-size-md};
+  --df-font-size-lg: #{$df-font-size-lg};
+  --df-font-size-xl: #{$df-font-size-xl};
+  --df-font-size-title: #{$df-font-size-title};
+  --df-font-size-elder: #{$df-font-size-elder};
+
+  // ---- 字体栈 ----
+  --df-font: #{$df-font};
+  --df-font-serif: #{$df-font-serif};
+  --df-font-hand: #{$df-font-hand};
+
+  // ---- 间距 ----
+  --df-space-xs: #{$df-space-xs};
+  --df-space-sm: #{$df-space-sm};
+  --df-space-md: #{$df-space-md};
+  --df-space-lg: #{$df-space-lg};
+  --df-space-xl: #{$df-space-xl};
+  --df-space-xxl: #{$df-space-xxl};
+
+  // ---- 圆角 ----
+  --df-radius-xs: #{$df-radius-xs};
+  --df-radius-sm: #{$df-radius-sm};
+  --df-radius-md: #{$df-radius-md};
+  --df-radius-lg: #{$df-radius-lg};
+  --df-radius-xl: #{$df-radius-xl};
+  --df-radius-round: #{$df-radius-round};
+
+  // ---- 渐变（墨绿系强调） ----
+  --df-gradient-brand: #{$df-gradient-brand};
+  --df-gradient-secondary: #{$df-gradient-secondary};
+  --df-gradient-stamp: #{$df-gradient-stamp};
+  --df-gradient-carbon: #{$df-gradient-carbon};
+  --df-gradient-gold: #{$df-gradient-gold};
+  --df-gradient-clock: #{$df-gradient-clock};
+
+  // ---- 布局尺寸 ----
+  --df-sidebar-w: #{$df-sidebar-w};
+  --df-sidebar-w-collapsed: #{$df-sidebar-w-collapsed};
+  --df-nav-h: #{$df-nav-h};
+  --df-topbar-h: #{$df-topbar-h};
+
+  // 主题切换收缩动画变量（由 theme.ts 的 applyThemeWithReveal 动态注入圆心与终点半径）
+  --df-reveal-x: 50%;
+  --df-reveal-y: 50%;
+  --df-reveal-end: 150%;
+  --df-reveal-duration: 0.65s;
+}
+
+// ---- 第二套主题：夜版（暗色墨绿森林）----
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  // ---- 页面与表面（暗墨绿森林；对齐模板夜版：卡片不透明 #20291f，页面纹理由 body::before 于卡片间隙透出） ----
+  --df-bg-page: #161e16;
+  --df-bg-card: #20291f;
+  --df-bg-nested: #2a352a;
+
+  // ---- 边框 ----
+  --df-border-color: #364536;
+  --df-border-input: #455545;
+
+  // ---- 文本层级（米白文字） ----
+  --df-text-primary: #e8e3d4;
+  --df-text-regular: #b0a890;
+  --df-text-secondary: #8a8270;
+  --df-text-placeholder: #6a6253;
+
+  // ---- 主色（夜版亮环保绿，保证对比） ----
+  --df-color-primary: #7cc47a;
+  --df-color-primary-light: #2d4a30;
+  --df-color-primary-dark: #5a9a6e;
+  --df-on-accent: #161e16;
+
+  // ---- 副色 ----
+  --df-color-secondary: #7cc47a;
+  --df-color-secondary-light: #2d4a30;
+  --df-color-secondary-dark: #5a9a6e;
+
+  // ---- 模块色（夜版调亮） ----
+  --df-module-1: #7cc47a;
+  --df-module-2: #5a9a6e;
+  --df-module-3: #c4a86b;
+  --df-module-4: #8ab09a;
+  --df-module-5: #a8c490;
+
+  // ---- 危险色 ----
+  --df-color-danger: #e07a6a;
+  --df-color-danger-muted: #3a2825;
+  --df-color-stamp: #e07a6a;
+
+  // ---- 标题色 ----
+  --df-color-title: #7cc47a;
+
+  // ---- 语义色 ----
+  --df-color-success: #7cc47a;
+  --df-color-warning: #c4a86b;
+  --df-color-info: #8ab09a;
+  --df-color-carbon: #a8c490;
+  --df-color-gold: #d4a96b;
+
+  // ---- 抽屉/侧栏 ----
+  --df-bg-dark: #0f160f;
+  --df-bg-dark-top: #161e16;
+  --df-drawer-text: #e8e3d4;
+  --df-drawer-text-mute: rgba(232, 227, 212, 0.55);
+  --df-drawer-hover: rgba(232, 227, 212, 0.08);
+  --df-drawer-active: rgba(122, 196, 122, 0.18);
+
+  // ---- 阴影 ----
+  --df-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.2);
+  --df-shadow-overlay: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --df-shadow-float: 0 10px 28px rgba(0, 0, 0, 0.45);
+
+  // ---- 渐变（暗色模式） ----
+  --df-gradient-brand: linear-gradient(180deg, #2a4a37, #1f3d2b);
+  --df-gradient-secondary: linear-gradient(135deg, #7cc47a, #5a9a6e);
+  --df-gradient-stamp: linear-gradient(135deg, #e07a6a, #b85c4a);
+  --df-gradient-clock: linear-gradient(150deg, #2a4a37 0%, #1f3d2b 60%, #16291f 100%);
+}
+
+// ---- 主题切换收缩动画（View Transitions）----
+// 由 theme.ts 的 applyThemeWithReveal 动态注入类与圆心/终点半径变量：
+// html.df-reveal-collapse：旧主题快照从全屏向按钮圆心收缩，露出新主题完整界面
+// 仅在该动画类存在时生效；默认禁用 crossfade，避免新旧快照叠影。
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.df-reveal-collapse::view-transition-new(root) {
+  z-index: 1;
+}
+
+html.df-reveal-collapse::view-transition-old(root) {
+  z-index: 2;
+  clip-path: circle(var(--df-reveal-end, 150%) at var(--df-reveal-x, 50%) var(--df-reveal-y, 50%));
+  animation: df-theme-collapse var(--df-reveal-duration, 0.65s) cubic-bezier(0.5, 0, 0.25, 1) both;
+}
+
+@keyframes df-theme-collapse {
+  from {
+    clip-path: circle(var(--df-reveal-end, 150%) at var(--df-reveal-x, 50%) var(--df-reveal-y, 50%));
+  }
+  to {
+    clip-path: circle(0px at var(--df-reveal-x, 50%) var(--df-reveal-y, 50%));
+  }
+}

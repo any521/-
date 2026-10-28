@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    # MySQL 兼容模式，全部 Track B 表由 schema-h2.sql 初始化，无需本地 MySQL
+    url: jdbc:h2:mem:dianfei;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-h2.sql
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: assign_id
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.dianfei: info

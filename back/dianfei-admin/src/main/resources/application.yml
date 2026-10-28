@@ -1,0 +1,151 @@
+spring:
+  application:
+    name: dianfei-backend
+  # C15 修复：不设默认 profile（曾默认 dev，裸启动即带 dev 弱配置=生产误配风险）。
+  # 必须显式指定：本地 `--spring.profiles.active=dev`（或 -Dspring.profiles.active=dev），
+  # 容器由 Dockerfile/compose 注入 SPRING_PROFILES_ACTIVE=prod；未指定时因 JWT_SECRET
+  # 空值校验（C6）与数据库口令必配（C7）双重 fail-closed 拒绝启动。
+  servlet:
+    multipart:
+      max-file-size: 500MB   # IM 视频上限 500MB（与 nginx client_max_body_size 对齐）
+      max-request-size: 500MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 邮箱验证码通道（V39）：163 SMTP（smtp.163.com:465 SSL），password 为网易「授权码」非登录密码
+  # S1 安全加固：授权码不再提供仓库内默认值（曾硬编码泄露），必须经环境变量 MAIL_PASSWORD 注入
+  mail:
+    host: ${MAIL_HOST:smtp.163.com}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:noreply@example.com}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.timeout: 5000
+      mail.smtp.connectiontimeout: 5000
+  # Flyway 版本化迁移：新库自动执行。存量库必须由发布流程显式 baseline 到已验证版本，
+  # 禁止应用启动时自动把未知结构当作 V0 并重放全部 ALTER，避免生产库被重复修改。
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.dianfei.**.entity
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: assign_id
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+
+# JWT 双令牌（D3：Access 2h / Refresh 7d）
+dianfei:
+  security:
+    field-key: ${DIANFEI_FIELD_KEY:}
+  jwt:
+    # C6 修复：生产禁止使用默认值/硬编码密钥，必须通过环境变量 JWT_SECRET 注入（≥32 字节强随机值）；
+    # 默认值为空 → 裸启动/生产缺配时 JwtUtils 启动校验拒绝（fail-closed）。本地开发默认值见 application-dev.yml
+    secret: ${JWT_SECRET:}
+    access-expire-minutes: 120
+    refresh-expire-days: 7
+  file:
+    storage-type: ${DIANFEI_FILE_STORAGE_TYPE:local}   # local / minio / oss（OSS/MinIO 模式缺配启动即拒绝）
+    local-path: ./upload
+    url-prefix: /api/file/preview
+    minio:
+      # MinIO 连接配置（凭据建议经环境变量注入，勿在仓库落明文）
+      endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
+      access-key: ${MINIO_ACCESS_KEY:}
+      secret-key: ${MINIO_SECRET_KEY:}
+      bucket: ${MINIO_BUCKET:dianfei}
+      # 存量本地文件启动迁移开关（storage-type=minio 时启用，幂等可重复执行）
+      migrate-on-start: ${MINIO_MIGRATE_ON_START:false}
+    oss:
+      # 阿里云 OSS 连接配置（凭据经环境变量注入，勿在仓库落明文）
+      endpoint: ${DIANFEI_OSS_ENDPOINT:oss-cn-beijing.aliyuncs.com}
+      access-key-id: ${DIANFEI_OSS_ACCESS_KEY_ID:}
+      access-key-secret: ${DIANFEI_OSS_ACCESS_KEY_SECRET:}
+      bucket: ${DIANFEI_OSS_BUCKET:waste-turns-to-gold}
+  ai:
+    # C14 修复：容器内必须经 DIANFEI_AI_BASE_URL 注入 ai-service 地址（compose 已配 http://ai-service:8100）；
+    # 未注入时回退默认 127.0.0.1:8100（本地裸进程联调用，dev yml 会覆盖为 8000）
+    base-url: ${DIANFEI_AI_BASE_URL:http://127.0.0.1:8100}
+    internal-token: ${DIANFEI_AI_INTERNAL_TOKEN:}
+    config-callback-token: ${DIANFEI_AI_CONFIG_CALLBACK_TOKEN:}
+    config-aes-key: ${DIANFEI_AI_CONFIG_AES_KEY:}
+  auth:
+    # Agent 系统账号接口白名单（principal_type=AGENT 仅可访问以下路径，对齐 04.8）
+    agent-whitelist:
+      - /api/agent/**
+      - /api/ai/**
+      - /api/dispatch/**
+
+# Knife4j 三分组
+springdoc:
+  api-docs:
+    enabled: true
+  group-configs:
+    - group: 用户端
+      paths-to-match: /api/**
+      packages-to-scan: com.dianfei
+      display-name: 用户端
+    - group: 员工端
+      paths-to-match: /api/staff/**, /api/auth/**
+      packages-to-scan: com.dianfei
+      display-name: 员工端
+    - group: 管理端
+      paths-to-match: /api/admin/**, /api/system/**, /api/auth/**
+      packages-to-scan: com.dianfei
+      display-name: 管理端
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+logging:
+  level:
+    # W-03: 主配置安全默认 info；dev profile 中覆盖为 debug（见 application-dev.yml）
+    com.dianfei: info
+
+# W-01/W-02: Spring Boot Actuator + Prometheus 监控端点
+# 仅暴露安全端点；/actuator/env 等敏感端点不在公开白名单（见 SecurityConfig）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  # 禁用 MailHealthIndicator：邮件通道非核心，且 163 SMTP 授权码未配时会触发
+  # 535 认证失败污染 /actuator/health 聚合状态。发信功能仍由 JavaMailSender 正常提供。
+  health:
+    mail:
+      enabled: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true

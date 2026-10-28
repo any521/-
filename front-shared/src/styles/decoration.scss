@@ -1,0 +1,601 @@
+// ============================================================
+// 森林日报 · 报刊编辑部装饰层（三端共享）
+// 衬线报头 / 双线分隔 / 胶带 / 邮票齿孔 / 铅笔批注 / 森林小人吉祥物
+// ============================================================
+
+@use '@shared/styles/tokens.scss' as *;
+
+// ------------------------------------------------------------
+// 页面底纸：米白旧报纸 + 纸纹大图（与 workbench-mobile 模板一致）
+// ------------------------------------------------------------
+html,
+body {
+  background-color: var(--df-bg-page);
+  font-family: var(--df-font);
+  color: var(--df-text-primary);
+}
+
+body {
+  position: relative;
+
+  // 旧报纸纸纹覆盖（模板 body::before 同款）
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url('/paper-texture.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+  }
+}
+
+// 局部报纸纹理容器（大图/空状态用）
+.bg-newspaper {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
+    opacity: 0.45;
+    pointer-events: none;
+  }
+}
+
+// ------------------------------------------------------------
+// 字体体系
+// ------------------------------------------------------------
+.font-serif {
+  font-family: var(--df-font-serif);
+  letter-spacing: -0.01em;
+}
+
+.font-hand {
+  font-family: var(--df-font-hand);
+}
+
+// 报刊大标题（衬线 + 墨绿 + 双线报头）
+.paper-headline {
+  font-family: var(--df-font-serif);
+  font-weight: 800;
+  color: var(--df-color-title);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+// ------------------------------------------------------------
+// 纸卡体系：细边框 + 中圆角 + 暖棕阴影
+// ------------------------------------------------------------
+.paper-card {
+  background: var(--df-bg-card);
+  border: 1px solid var(--df-border-color);
+  border-radius: var(--df-radius-lg);
+  box-shadow: var(--df-shadow-card);
+  padding: var(--df-space-lg);
+  margin-bottom: var(--df-space-md);
+  position: relative;
+
+  // 卡片头：衬线小标题 + 底部细分栏线
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--df-space-sm);
+    padding-bottom: var(--df-space-sm);
+    margin-bottom: var(--df-space-md);
+    border-bottom: 1px solid var(--df-border-color);
+
+    h3,
+    h4 {
+      margin: 0;
+      font-family: var(--df-font-serif);
+      font-size: var(--df-font-size-md);
+      font-weight: 800;
+      color: var(--df-color-title);
+      letter-spacing: -0.01em;
+    }
+  }
+
+  &__more {
+    font-size: var(--df-font-size-sm);
+    color: var(--df-text-secondary);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--df-color-primary);
+    }
+  }
+}
+
+// 双细线（报纸版式强调分隔）
+.paper-divider {
+  height: 3px;
+  border-top: 1px solid var(--df-border-color);
+  border-bottom: 1px solid var(--df-border-color);
+  margin: var(--df-space-md) 0;
+
+  &--tight {
+    margin: var(--df-space-sm) 0;
+  }
+
+  // 报头双线（墨绿强调）
+  &--accent {
+    border-top: 3px double var(--df-color-primary);
+    border-bottom: 3px double var(--df-color-primary);
+  }
+}
+
+// 点线分隔（列表行之间，比实线轻盈）
+.paper-row-line {
+  border: none;
+  border-top: 1px dotted var(--df-border-color);
+  margin: 0;
+}
+
+// ------------------------------------------------------------
+// 报头（masthead）：刊名 + 日期行 + 双线框
+// ------------------------------------------------------------
+.masthead {
+  padding: var(--df-space-md) 0 var(--df-space-sm);
+  margin-bottom: var(--df-space-md);
+  border-top: 3px double var(--df-color-primary);
+  border-bottom: 1px solid var(--df-border-color);
+
+  &__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--df-space-sm);
+  }
+
+  &__name {
+    margin: 0;
+    font-family: var(--df-font-serif);
+    font-size: var(--df-font-size-xl);
+    font-weight: 800;
+    color: var(--df-color-title);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  &__slogan {
+    margin: 0;
+    font-size: var(--df-font-size-xs);
+    color: var(--df-text-secondary);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--df-space-xs);
+    padding-top: var(--df-space-xs);
+    border-top: 1px solid var(--df-border-color);
+    font-size: var(--df-font-size-xs);
+    color: var(--df-text-secondary);
+  }
+
+  &__date {
+    font-family: var(--df-font-serif);
+    letter-spacing: 0.05em;
+  }
+}
+
+// ------------------------------------------------------------
+// 报刊标签：墨绿 / 环保绿 / 陶土红 / 蜂蜜金 四种语义色
+// ------------------------------------------------------------
+.paper-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--df-font-size-xs);
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: var(--df-radius-round);
+  letter-spacing: 0.02em;
+
+  &--primary {
+    color: var(--df-color-primary);
+    background: var(--df-color-primary-light);
+  }
+
+  &--green {
+    color: var(--df-module-1);
+    background: rgba(74, 139, 61, 0.12);
+  }
+
+  &--olive {
+    color: var(--df-module-3);
+    background: rgba(139, 154, 61, 0.14);
+  }
+
+  &--stamp {
+    color: var(--df-color-stamp);
+    background: var(--df-color-danger-muted);
+  }
+
+  &--gold {
+    color: var(--df-color-gold-dark);
+    background: rgba(189, 138, 78, 0.14);
+  }
+}
+
+// ------------------------------------------------------------
+// 圆形邮戳（虚线圆 + 旋转）
+// ------------------------------------------------------------
+.paper-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px dashed var(--df-color-stamp);
+  color: var(--df-color-stamp);
+  font-family: var(--df-font-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transform: rotate(-8deg);
+  opacity: 0.85;
+  text-align: center;
+  line-height: 1.3;
+}
+
+// ------------------------------------------------------------
+// 邮票锯齿边框容器（内容放内部，带内白边）
+// ------------------------------------------------------------
+.stamp-border {
+  position: relative;
+  padding: 6px;
+  border: 1px solid var(--df-border-color);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px dashed rgba(58, 51, 40, 0.35);
+    pointer-events: none;
+  }
+
+  &__inner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--df-radius-xs);
+  }
+}
+
+// ------------------------------------------------------------
+// 邮票风日期 chip（虚线齿孔，复用模板 .date-chip 风格）
+// ------------------------------------------------------------
+.date-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--df-text-secondary);
+  background: var(--df-bg-card);
+  border: 1.5px dashed var(--df-color-primary);
+  border-radius: 4px;
+  padding: 7px 13px;
+  box-shadow: var(--df-shadow-card);
+
+  svg {
+    color: var(--df-text-tertiary);
+  }
+}
+
+// ------------------------------------------------------------
+// 胶带贴痕（环保绿 / 橄榄黄绿两色，斜贴顶部）
+// ------------------------------------------------------------
+@mixin tape-effect($top: true, $color: var(--df-module-1)) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    width: 56px;
+    height: 17px;
+    background: color-mix(in srgb, #{$df-module-1} 30%, transparent);
+    border-left: 1px dashed color-mix(in srgb, #{$df-module-1} 55%, transparent);
+    border-right: 1px dashed color-mix(in srgb, #{$df-module-1} 55%, transparent);
+    transform: rotate(-6deg);
+    z-index: 3;
+    pointer-events: none;
+
+    @if $top {
+      top: -9px;
+    } @else {
+      top: auto;
+      bottom: -9px;
+      transform: rotate(7deg);
+    }
+  }
+}
+
+.has-tape-top {
+  @include tape-effect(true);
+}
+
+.has-tape-bottom {
+  @include tape-effect(false);
+}
+
+.has-tape-olive {
+  @include tape-effect(true, var(--df-module-3));
+}
+
+// ------------------------------------------------------------
+// 铅笔批注（手写体 + 浅斜）
+// ------------------------------------------------------------
+.pencil-note {
+  font-family: var(--df-font-hand);
+  font-size: 14px;
+  color: var(--df-text-secondary);
+  transform: rotate(-4deg);
+  display: inline-block;
+  padding: 2px 6px;
+  line-height: 1.5;
+}
+
+.note-highlight {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(189, 138, 78, 0.18),
+    rgba(189, 138, 78, 0.18) 4px,
+    rgba(189, 138, 78, 0.08) 4px,
+    rgba(189, 138, 78, 0.08) 8px
+  );
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+// ------------------------------------------------------------
+// 新闻头版徽章（NEW TODAY）
+// ------------------------------------------------------------
+.new-badge {
+  position: relative;
+  display: inline-block;
+  background: var(--df-color-stamp);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+  box-shadow: 0 2px 4px rgba(184, 92, 74, 0.3);
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent transparent transparent var(--df-color-stamp);
+  }
+}
+
+// ------------------------------------------------------------
+// 森林小人吉祥物 SVG（深墨绿背景中显眼）
+// 使用：<svg class="mascot-svg" viewBox="0 0 60 70">...</svg>
+// ------------------------------------------------------------
+.mascot-svg {
+  width: 48px;
+  height: 56px;
+  color: var(--df-drawer-text);
+  animation: mascot-sway 4s ease-in-out infinite;
+  transform-origin: 50% 90%;
+
+  .leaf-hat { fill: var(--df-module-1); }
+  .leaf-top { fill: var(--df-module-2); }
+  .head { fill: var(--df-bg-card); stroke: currentColor; stroke-width: 1.5; }
+  .eye { fill: currentColor; }
+  .smile { stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; fill: none; }
+  .body { fill: var(--df-module-2); }
+  .sprig { fill: var(--df-module-1); }
+}
+
+@keyframes mascot-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+// ------------------------------------------------------------
+// 暗色炫酷卡（大时钟 / 番茄钟 / 整体情况侧栏，深墨绿光晕）
+// ------------------------------------------------------------
+.clock-card,
+.pomo-card,
+.dark-accent-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--df-radius-xl);
+  color: #f4f3f0;
+  padding: 26px 28px;
+  box-shadow: var(--df-shadow-overlay);
+  background: var(--df-gradient-clock);
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    right: -70px;
+    top: -90px;
+    background: radial-gradient(circle, rgba(189, 138, 78, 0.35), transparent 70%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    left: -60px;
+    bottom: -80px;
+    background: radial-gradient(circle, rgba(111, 143, 106, 0.28), transparent 70%);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+:root[data-theme='dark'] .clock-card,
+:root[data-theme='dark'] .pomo-card,
+:root[data-theme='dark'] .dark-accent-card {
+  background: linear-gradient(150deg, #2a4a37 0%, #1f3d2b 60%, #16291f 100%);
+}
+
+// ------------------------------------------------------------
+// 页眉装饰（墨绿竖条 + 衬线标题 + 虚线分隔）
+// ------------------------------------------------------------
+.page-header-deco {
+  display: flex;
+  align-items: center;
+  gap: var(--df-space-sm);
+  margin-bottom: var(--df-space-md);
+
+  &::before {
+    content: '';
+    width: 4px;
+    height: 1.4em;
+    border-radius: 2px;
+    background: var(--df-color-primary);
+    flex: 0 0 auto;
+  }
+
+  h1,
+  h2 {
+    margin: 0;
+    font-size: var(--df-font-size-lg);
+    font-family: var(--df-font-serif);
+    font-weight: 800;
+    color: var(--df-color-title);
+    letter-spacing: -0.02em;
+  }
+
+  .deco-lines {
+    flex: 1;
+    height: 0;
+    border-bottom: 1px dashed var(--df-border-input);
+  }
+}
+
+// ------------------------------------------------------------
+// 分组标题（EN 副标题 + 中文标题 + 虚线分隔）
+// ------------------------------------------------------------
+.sec-grp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 26px 2px 14px;
+
+  .bar {
+    width: 4px;
+    height: 19px;
+    border-radius: 2px;
+    background: var(--df-color-primary);
+    flex: 0 0 auto;
+  }
+
+  .zh {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-family: var(--df-font-serif);
+    color: var(--df-text-primary);
+  }
+
+  .en {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--df-text-secondary);
+    font-family: var(--df-font-serif);
+  }
+
+  .line {
+    flex: 1;
+    height: 0;
+    border-bottom: 1px dashed var(--df-border-input);
+  }
+}
+
+// 单 section 标题（左侧墨绿竖条 + 衬线中文标题）
+.sec-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 18px 2px 10px;
+  letter-spacing: -0.01em;
+  font-family: var(--df-font-serif);
+  color: var(--df-text-primary);
+
+  &::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background: var(--df-color-primary);
+  }
+}
+
+// ------------------------------------------------------------
+// 入场动画
+// ------------------------------------------------------------
+.app,
+.layout {
+  animation: paper-in 0.45s ease;
+}
+
+@keyframes paper-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+// ------------------------------------------------------------
+// 滚动条美化
+// ------------------------------------------------------------
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: var(--df-text-secondary);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+// ------------------------------------------------------------
+// 移动端响应式
+// ------------------------------------------------------------
+@media (max-width: 768px) {
+  .paper-headline {
+    font-size: var(--df-font-size-lg);
+  }
+
+  .masthead__name {
+    font-size: var(--df-font-size-lg);
+  }
+}

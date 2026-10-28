@@ -1,0 +1,28 @@
+# dianfei-ai-service 运行依赖（Python 3.11+，当前 venv 3.14 已验证）
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+
+# ---- 可选增强（M2/M3 里程碑按需启用，代码中均有降级路径，不装也能跑）----
+# httpx==0.27.0          # 供应商 HTTP 客户端（缺省用标准库 urllib）
+# langgraph==0.2.0       # F8 多智能体编排（缺省用内置轻量图引擎 app/agents/graph.py）
+# qdrant-client==1.9.0   # F2 RAG 向量库（缺省用内置知识库规则匹配）
+# prophet==1.1.0         # F9 时序预测（缺省用移动平均+周期因子兜底模型）
+
+# ---- 3D extreme 渲染闭环（2026-08 Track G·B4；固定次版本，实测 1.62.0）----
+# 未安装/Chromium 缺失时 mode=extreme 自动降级 advanced（契约 C4-3，永不阻断）；
+# 本地开发需执行：python -m playwright install chromium
+playwright==1.62.0           # headless Chromium 渲染 spec 截图（Docker 内执行 playwright install --with-deps chromium)
+
+# ---- YOLO 端侧模型推理（F6 视觉检测；V44 F7 升级新增）----
+onnxruntime==1.20.1          # ONNX 推理引擎（前端 ort-wasm 同款，确保一致性）
+opencv-python-headless==4.10.0.84  # 标注图绘制、图像预处理（headless 适用于服务器）
+
+# ---- 本地离线 ASR（V46 F7 升级：替代国内不可达的浏览器 Web Speech API）----
+vosk==0.3.45                 # 中文小模型 CPU 推理（模型构建时下载至 /app/models）
+
+# langchain-core==0.2.0        # Document/BaseRetriever 接口（代码 import 时 try/except，缺省降级纯函数）
+# langchain==0.2.0             # 组装链路（当前仅用 community BM25，其余零开销）
+# langchain-community==0.2.0   # BM25Retriever（依赖 rank-bm25，纯 Python 离线可用）
+# rank-bm25==0.2.2             # BM25Okapi 实现
+# scipy==1.10.0                # 词频稀疏矩阵（无 scipy 时降级纯 dict 向量）

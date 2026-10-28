@@ -1,0 +1,69 @@
+{
+  "$comment": "能力→模型路由与降级链（05 章 / D14）：chain 依序尝试，全部失败走 fallback 规则兜底",
+  "routes": {
+    "visual_verify": {
+      "chain": [
+        {"provider": "ark", "model": "doubao-seed-2-0-mini-260428"},
+        {"provider": "mock", "model": "mock-vision"}
+      ],
+      "fallback": "MANUAL_REVIEW",
+      "max_retries": 1,
+      "retry_temperature_decay": 0.5
+    },
+    "repair_diagnose": {
+      "chain": [
+        {"provider": "deepseek", "model": "deepseek-chat"},
+        {"provider": "glm-4v", "model": "glm-4-flash"},
+        {"provider": "mock", "model": "mock-chat"}
+      ],
+      "fallback": "KNOWLEDGE_RULE",
+      "max_retries": 1,
+      "retry_temperature_decay": 0.5
+    },
+    "voice_parse": {
+      "chain": [
+        {"provider": "deepseek", "model": "deepseek-chat"},
+        {"provider": "mock", "model": "mock-chat"}
+      ],
+      "fallback": "TEXT_INPUT",
+      "max_retries": 1,
+      "retry_temperature_decay": 0.5
+    },
+    "forecast": {
+      "chain": [
+        {"provider": "mock", "model": "mock-chat"}
+      ],
+      "fallback": "MOVING_AVERAGE",
+      "max_retries": 0,
+      "retry_temperature_decay": 1.0
+    },
+    "pricing": {
+      "chain": [
+        {"provider": "deepseek", "model": "deepseek-chat"},
+        {"provider": "mock", "model": "mock-chat"}
+      ],
+      "fallback": "BASE_PRICE",
+      "max_retries": 0,
+      "retry_temperature_decay": 1.0
+    },
+    "market_price": {
+      "chain": [
+        {"provider": "deepseek", "model": "deepseek-chat"},
+        {"provider": "mock", "model": "mock-chat"}
+      ],
+      "fallback": "REGEX_EXTRACT",
+      "max_retries": 0,
+      "retry_temperature_decay": 1.0
+    },
+    "agent_plan": {
+      "chain": [
+        {"provider": "deepseek", "model": "deepseek-reasoner"},
+        {"provider": "deepseek", "model": "deepseek-chat"},
+        {"provider": "mock", "model": "mock-chat"}
+      ],
+      "fallback": "RULE_ENGINE",
+      "max_retries": 1,
+      "retry_temperature_decay": 0.5
+    }
+  }
+}

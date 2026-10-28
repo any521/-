@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spec 渲染器（Track G · extreme 渲染闭环专用，无外网依赖）</title>
+  <style>
+    /* 背景与前端 ThreeViewer 观感对齐：径向渐变光晕 + 深色底 */
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      background:
+        radial-gradient(ellipse 90% 70% at 50% 30%, rgba(33, 166, 102, 0.18), transparent 65%),
+        radial-gradient(ellipse 70% 55% at 50% 85%, rgba(61, 139, 255, 0.14), transparent 60%),
+        #1a1d21;
+    }
+    canvas { position: fixed; inset: 0; width: 512px; height: 512px; }
+  </style>
+</head>
+<body>
+  <!-- 执行器为本地单文件 IIFE（esbuild 打包 three + specModel 执行器，零外网依赖） -->
+  <script src="./spec-executor.iife.js"></script>
+</body>
+</html>
