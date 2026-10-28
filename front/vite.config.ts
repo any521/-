@@ -20,6 +20,9 @@ export default defineConfig({
     compression({ algorithms: ['gzip'], threshold: 10240, deleteOriginalAssets: false }),
   ],
   resolve: {
+    // 共享层源码位于 ../front-shared，裸依赖固定回本应用 node_modules
+    // （CI 无仓库根 node_modules 兜底，否则报 Failed to resolve import "axios"）
+    dedupe: ['axios', 'vue'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       // D0 共享层：设计令牌 / 请求封装 / Mock 引擎 / 通用业务组件

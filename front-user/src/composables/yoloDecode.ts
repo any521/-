@@ -62,7 +62,7 @@ export async function loadModelSession(backend: InferBackend): Promise<{
     const manifest = (await res.json()) as ModelManifest
     const ort = await import('onnxruntime-web')
     // wasm 资产本地化（src/assets/ort/，见 ortAssets）：不走 CDN，配合 COOP/COEP 可开 WASM 多线程
-    configureOrtAssets()
+    if (!configureOrtAssets()) throw new Error('ORT WASM 资产缺失，请按 README 放入 src/assets/ort/')
     const providers = backend === 'webgpu' ? ['webgpu', 'wasm'] : ['wasm']
     const session = await ort.InferenceSession.create(`${import.meta.env.BASE_URL}models/${manifest.file}`, {
       executionProviders: providers,

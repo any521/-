@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS biz_area (
   id              BIGINT PRIMARY KEY,
   area_name       VARCHAR(64)  NOT NULL,
   address         VARCHAR(255),
+  lng             DECIMAL(10, 6),
+  lat             DECIMAL(10, 6),
   clean_threshold INT          NOT NULL DEFAULT 100,
   household_count INT          NOT NULL DEFAULT 0,
   status          TINYINT      NOT NULL DEFAULT 1,
@@ -50,6 +52,7 @@ CREATE TABLE IF NOT EXISTS biz_staff (
   status       TINYINT      NOT NULL DEFAULT 1,
   apply_scene  TINYINT      NOT NULL DEFAULT 0,
   apply_reason VARCHAR(255),
+  audit_remark VARCHAR(255),
   create_time  DATETIME, update_time DATETIME, create_by VARCHAR(64), update_by VARCHAR(64),
   deleted      TINYINT      NOT NULL DEFAULT 0
 );

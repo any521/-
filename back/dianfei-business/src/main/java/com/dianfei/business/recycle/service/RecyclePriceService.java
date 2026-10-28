@@ -79,7 +79,8 @@ public class RecyclePriceService extends ServiceImpl<RecyclePriceMapper, Recycle
      * 前端表单提交小写 code（electronics），语音 LLM 可能输出任意值（如 electronices 错拼、
      * "纸箱,废纸,报纸"逗号串），requireActive 仅靠 MySQL 大小写不敏感匹配——electronics 与
      * E_WASTE/电子产品 完全不同名，必报「未配置生效报价」。归一化后新订单统一落英文核算码
-     * （有英文行的品类）或中文行名（家电/玻璃/厨余，无英文行），白名单外明确报错。
+     * （有英文行的品类）或中文行名（家电/玻璃/厨余，无英文行）；未命中别名的自定义品类保留原值，
+     * 交由 requireActive 校验报价是否已配置（支持 09.3 零代码新增品类）。
      */
     private static final Map<String, String> CATEGORY_NORMALIZE = new HashMap<>();
 
@@ -130,7 +131,8 @@ public class RecyclePriceService extends ServiceImpl<RecyclePriceMapper, Recycle
             normalized = CATEGORY_NORMALIZE.get(trimmed.toUpperCase(Locale.ROOT));
         }
         if (normalized == null) {
-            throw new BusinessException("不支持的回收品类[" + category + "]，请从列表选择");
+            // 自定义品类不做硬编码白名单限制，是否可用由后续 requireActive 的生效报价决定
+            return trimmed;
         }
         return normalized;
     }

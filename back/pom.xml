@@ -41,6 +41,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <resilience4j.version>2.2.0</resilience4j.version>
         <easyexcel.version>3.3.4</easyexcel.version>
+        <commons-io.version>2.15.1</commons-io.version>
         <timefold.version>1.14.0</timefold.version>
     </properties>
 
@@ -145,6 +146,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
+            </dependency>
+            <!-- 与 commons-compress 1.26 传递要求对齐，避免导出时缺少 AbstractStreamBuilder -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

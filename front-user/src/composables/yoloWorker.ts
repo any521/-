@@ -8,9 +8,6 @@ import * as ort from 'onnxruntime-web'
 import { decodeYolo, boxToSource, MANIFEST_URL, type ModelManifest, type RawDetection } from './yoloDecode'
 import { configureOrtAssets } from './ortAssets'
 
-// wasm 资产本地化（src/assets/ort/，见 ortAssets），不走 CDN
-configureOrtAssets()
-
 const ctx = self as unknown as {
   postMessage: (msg: unknown, transfer?: Transferable[]) => void
   onmessage: ((e: MessageEvent) => void) | null
@@ -32,6 +29,8 @@ interface InferMsg {
 type WorkerMsg = InferMsg | { type: 'load'; backend?: 'webgpu' | 'wasm' }
 
 async function load(backend: 'webgpu' | 'wasm'): Promise<void> {
+  // wasm 资产本地化（src/assets/ort/，见 ortAssets），不走 CDN；缺失则抛错由上层降级 mock
+  if (!configureOrtAssets()) throw new Error('ORT WASM 资产缺失，请按 README 放入 src/assets/ort/')
   const res = await fetch(MANIFEST_URL, { cache: 'no-cache' })
   if (!res.ok) throw new Error(`manifest ${res.status}`)
   const manifest = (await res.json()) as ModelManifest

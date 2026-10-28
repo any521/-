@@ -38,7 +38,7 @@ public class MallExchangeService extends ServiceImpl<MallExchangeMapper, MallExc
     private final MessageSender messageSender;
 
     /**
-     * 兑换下单：兑换单先落库取 ID 作为账本幂等键（MALL:exchangeId:CONSUME），
+     * 兑换下单：兑换单先落库取 ID 作为账本幂等键（userId:MALL:exchangeId:CONSUME），
      * 再条件更新扣库存（防超卖），最后扣分并回填流水 ID；任一步失败整体回滚
      */
     @Transactional

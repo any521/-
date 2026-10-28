@@ -57,11 +57,11 @@ class MallExchangeFlowTest {
         assertThat(vo.getExchangeNo()).startsWith("MO");
         assertThat(ledger.getBalance(userId)).isEqualTo(800);
         assertThat(productService.getById(product.getId()).getStock()).isEqualTo(8);
-        // 扣分流水回填溯源：MALL:exchangeId:CONSUME，points 记负
+        // 扣分流水回填溯源：userId:MALL:exchangeId:CONSUME，points 记负
         CarbonLog log = carbonLogMapper.selectById(Long.valueOf(vo.getCarbonLogId()));
         assertThat(log).isNotNull();
         assertThat(log.getPoints()).isEqualTo(-200);
-        assertThat(log.getBizKey()).isEqualTo("MALL:" + vo.getId() + ":CONSUME");
+        assertThat(log.getBizKey()).isEqualTo(userId + ":MALL:" + vo.getId() + ":CONSUME");
     }
 
     @Test

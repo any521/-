@@ -1,4 +1,9 @@
 spring:
+  # 单测为轻量上下文，不启用 Actuator 安全管理自动配置（其依赖 HttpSecurity，
+  # 与测试启动类排除 SecurityAutoConfiguration 后的上下文冲突）
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
   datasource:
     driver-class-name: org.h2.Driver
     # MySQL 兼容模式，全部 Track B 表由 schema-h2.sql 初始化，无需本地 MySQL

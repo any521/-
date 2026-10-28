@@ -7,7 +7,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared": ["../front-shared/src/index.ts"],
-      "@shared/*": ["../front-shared/src/*"]
+      "@shared/*": ["../front-shared/src/*"],
+      // 共享层源码的裸依赖固定回本应用依赖（干净 CI 环境无仓库根 node_modules）
+      "axios": ["./node_modules/axios"],
+      "vue": ["./node_modules/vue"]
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
   }
